@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Smart RTO & COD risk Predictor{% endblock %}
+
+{% block content %}
+
+<body class="glass-page">
+<div class="container py-4 px-3 px-md-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1 text-slate-900 text-dark">Shipment Analytics Dashboard</h2>
+            <p class="text-muted mb-0 small text-dark">Overview of product value, delivery success, and risk distribution</p>
+        </div>
+    </div>
+
+   
+    <div class="row g-3 g-md-4 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card stat-card-glass" style="background-color: rgba(84, 39, 126, 0.903)">
+                <div class="stat-label-glass text-light">Total Product Value</div>
+                <div class="stat-val-glass text-light">268K</div>
+                <div class="stat-sub-glass text-light"><i class="bi bi-box-seam me-1"></i>Combined order value</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card stat-card-glass" style="background-color: rgba(103, 46, 144, 0.903)">
+                <div class="stat-label-glass text-light">Total Of COD Amount</div>
+                <div class="stat-val-glass text-light">234K</div>
+                <div class="stat-sub-glass text-light"><i class="bi bi-currency-rupee me-1"></i>Cash on delivery exposure</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card stat-card-glass" style="background-color: rgba(138, 62, 192, 0.903)">
+                <div class="stat-label-glass text-light">RTO Orders</div>
+                <div class="stat-val-glass text-light">172</div>
+                <div class="stat-sub-glass text-light"><i class="bi bi-arrow-return-left me-1"></i>Returned to origin</div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card stat-card-glass" style="background-color: rgba(158, 90, 221, 0.903)">
+                <div class="stat-label-glass text-light">Delivered</div>
+                <div class="stat-val-glass text-light">417</div>
+                <div class="stat-sub-glass text-light"><i class="bi bi-check-circle me-1"></i>Successfully delivered</div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-8">
+            <div class="glass-card h-100">
+                <div class="glass-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold fs-6 text-light">Zone-wise COD Amount</h5>
+                    <span class="badge bg-primary-subtle text-primary">By Zone</span>
+                </div>
+                <div class="p-3" style="height: 330px;">
+                    <canvas id="zoneChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="glass-card h-100">
+                <div class="glass-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold fs-6 text-light">Order Status</h5>
+                    <span class="badge bg-success-subtle text-success">Delivery Ratio</span>
+                </div>
+                <div class="p-3" style="height: 330px;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <div class="glass-card h-100">
+                <div class="glass-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold fs-6 text-light">Charged Weight by Risk</h5>
+                    <span class="badge bg-info-subtle text-info">Weight Trend</span>
+                </div>
+                <div class="p-3" style="height: 330px;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="glass-card h-100">
+                <div class="glass-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold fs-6 text-light">Risk Distribution</h5>
+                    <span class="badge bg-warning-subtle text-warning">Severity</span>
+                </div>
+                <div class="p-3" style="height: 330px;">
+                    <canvas id="riskPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+new Chart(document.getElementById('statusChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Delivered', 'RTO'],
+        datasets: [{
+            data: [417, 172],
+            backgroundColor: ['purple', '#a664da'],
+            borderColor: '#ffffff',
+            borderWidth: 3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } }
+        }
+    }
+});
+
+new Chart(document.getElementById('zoneChart'), {
+    type: 'bar',
+    data: {
+        labels: ['D1', 'B', 'D2', 'E', 'F', 'D', 'A'],
+        datasets: [{
+            label: 'COD Amount',
+            data: [123673, 82214, 15264, 6587, 5047, 1007, 329],
+            backgroundColor: ['#4a0e79', '#6a1aa9', '#8a3ec0', '#9e5add', '#b06ef2', '#c18bff', '#d1aaff'],
+            borderRadius: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, grid: { color: 'rgba(203, 213, 225, 0.4)' } }
+        }
+    }
+});
+
+new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+        labels: ['Low', 'Medium', 'High'],
+        datasets: [{
+            label: 'Charged Weight',
+            data: [154562.41, 36840.80, 6362.28],
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(99, 102, 241, 0.12)',
+            borderWidth: 3,
+            tension: 0.35,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: true }
+        },
+        scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, grid: { color: 'rgba(203, 213, 225, 0.4)' } }
+        }
+    }
+});
+
+new Chart(document.getElementById('riskPieChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+        datasets: [{
+            data: [563, 22, 4],
+            backgroundColor: ['#6315c1', '#ce1ab9', '#ce1a4d'],
+            borderColor: '#ffffff',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } }
+        }
+    }
+});
+</script>
+{% endblock %}
