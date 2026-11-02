@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART COD RISK & RTO PREDICTION SYSTEM</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <style>
+        body {
+            background-color:black;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #e539e5, #3bb9cf);
+            color: white;
+            padding: 100px 0;
+        }
+
+        .feature-card {
+            transition: 0.3s;
+            background-image: url("https://i.pinimg.com/736x/95/c6/17/95c617c2a3a7329cb15cc6e5b796231e.jpg");
+            background-size: cover;
+            background-position: center;
+
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .section-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #1e2d3e;
+            color: white;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar">
+    <div class="container-fluid px-3 px-lg-4">
+        <a class="navbar-brand" href="{{ url_for('home') }}">
+            <i class="bi bi-shield-check brand-icon"></i>
+            <span>Smart RTO & COD risk Predictor</span>
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('home') }}">HOME</a>
+                </li>
+                {% if session.get('user_id') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">DASHBOARD</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('rto_prediction') }}">RTO PREDICTION</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('cod_prediction') }}">COD PREDICTION</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('realtime_dashboard') }}">REAL-TIME DASHBOARD</a>
+                </li>
+                <li class="nav-item nav-action-item">
+                    <form action="{{ url_for('logout') }}" method="post" class="d-inline-flex m-0">
+                        <button class="btn btn-logout" type="submit">
+                            <i class="bi bi-box-arrow-right me-1"></i>LOGOUT
+                        </button>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item nav-action-item">
+                    <a class="btn btn-login" href="{{ url_for('login') }}">LOGIN</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">
+            Smart COD Risk & RTO Prediction System
+        </h1>
+
+        <p class="lead mt-4">
+            Predict risky COD orders, estimate RTO probability,
+            and make smarter shipping decisions using Machine Learning.
+        </p>
+
+        <div class="mt-4">
+            <a href="{{ url_for('login') }}" class="btn btn-light btn-lg me-2">
+                Get Started
+            </a>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="py-5">
+    <div class="container">
+
+        <h2 class="text-center section-title" style="color:white;">
+            Key Features
+        </h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card feature-card shadow h-100">
+                    <div class="card-body text-center">
+                        <h4 style="color:#b109b1;">RTO Prediction</h4>
+                        <p>
+                            Predict the probability of Return-to-Origin
+                            before dispatching an order.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card feature-card shadow h-100">
+                    <div class="card-body text-center">
+                        <h4 style="color:#7c09b1;">Risk Analysis</h4>
+                        <p>
+                            Identify low, medium, and high-risk COD
+                            orders using machine learning models.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card feature-card shadow h-100">
+                    <div class="card-body text-center">
+                        <h4 style="color:#0965b1;">Business Insights</h4>
+                        <p>
+                            Analyze shipment performance, revenue,
+                            and delivery trends through dashboards.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="bg-light py-5">
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+                <h2 class="section-title">
+                    About The Project
+                </h2>
+
+                <p>
+                    This web-based platform helps e-commerce businesses
+                    reduce shipping losses by predicting Return-to-Origin
+                    orders and analyzing customer order risk.
+                </p>
+
+                <p>
+                    The system uses Machine Learning model which is
+                    Descision Tree Classifier to generate accurate
+                    predictions and support data-driven decisions.
+                </p>
+            </div>
+
+            <div class="col-lg-6 text-center">
+                <img
+                    src="https://img.magnific.com/free-photo/call-center-worker-using-ai-tech-laptop-reply-customers-closeup_482257-125822.jpg?semt=ais_hybrid&w=740&q=80"
+                    class="img-fluid rounded shadow"
+                    alt="Analytics Dashboard">
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<section class="py-5">
+    <div class="container">
+
+        <h2 class="text-center section-title" style="color:white;">
+            What The System Provides
+        </h2>
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+                <h1 class="text-success">95%</h1>
+                <p style="color:white;">Prediction Accuracy</p>
+            </div>
+
+            <div class="col-md-3">
+                <h1 class="text-primary">24/7</h1>
+                <p style="color:white;">Order Analysis</p>
+            </div>
+
+            <div class="col-md-3">
+                <h1 class="text-warning">100%</h1>
+                <p style="color:white;">Web-Based Access</p>
+            </div>
+
+            <div class="col-md-3">
+                <h1 class="text-danger">Real-Time</h1>
+                <p style="color:white;">Risk Detection</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<section class="bg-white text-dark text-center py-5">
+    <div class="container">
+
+        <h2>
+            Start Predicting Shipment Risks Today
+        </h2>
+
+        <p class="lead">
+            Improve delivery success and reduce RTO losses using
+            intelligent machine learning models.
+        </p>
+
+    </div>
+</section>
+
+<footer class="text-center">
+    <div class="container">
+        <p class="mb-0">
+            Smart COD Risk & RTO Prediction System | Desined by Bhavi Sharma
+        </p>
+    </div>
+</footer>
+
+
+
+
+<!-- Bootstrap 5 JS Bundle & Fallback Navbar Toggler -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggler = document.querySelector(".navbar-toggler");
+        const navCollapse = document.getElementById("navbarNav");
+        if (toggler && navCollapse) {
+            toggler.addEventListener("click", function () {
+                if (typeof bootstrap === "undefined" || !bootstrap.Collapse) {
+                    navCollapse.classList.toggle("show");
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
